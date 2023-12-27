@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  php:
+    container_name: fabianmaria_php
+    networks:
+      - fabianmaria-network
+    build:
+      context: "./"
+      dockerfile: "./docker/php/Dockerfile_fresh_install"
+    volumes:
+      - "./docker/php/conf.d/:/usr/local/etc/php/conf.d/"
+      - "./docker/php/php.ini-development:/usr/local/etc/php/php.ini"
+    env_file:
+      - .env
+    restart: unless-stopped
+
+networks:
+  fabianmaria-network:
+    driver: bridge

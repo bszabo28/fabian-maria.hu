@@ -1,0 +1,39 @@
+FROM php:8.2-fpm
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    zip \
+    unzip \
+    p7zip-full \
+    git \
+    wget \
+    libwebp-dev \
+    libpng-dev \
+    libjpeg-dev \
+    nano
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN install-php-extensions gd xdebug zip pdo_mysql intl opcache apcu
+
+WORKDIR /var/www/html
+
+COPY ./docker/php/php.ini-development /usr/local/etc/php/php.ini
+COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
+
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 700 /var/www/html
+
+RUN usermod -a -G www-data root
+
+WORKDIR /var/www/
+
+RUN composer create-project drupal/recommended-project html2 --no-interaction
+RUN cp -R html2/* html/
+RUN rm -rf html2
+
+WORKDIR /var/www/html
