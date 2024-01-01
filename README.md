@@ -64,24 +64,21 @@ docker exec -it fabianmaria_php /bin/bash
 # site telepítése a fejlesztői környezetben
 drush site:install standard --db-url=mysql://$MYSQL_USER:$MYSQL_PASSWORD@mysql:3306/$MYSQL_DATABASE --site-name=$LOCAL_HOST_NAME --account-name=admin --account-pass=abc123 --locale=hu -y
 
-drush cset system.site uuid "da84729f-617e-4b9b-9c11-9b2658a505dd" -y
-drush cset language.entity.hu uuid "57984991-b07e-4828-bc1c-9f30deed9b45" -y
+drush cset system.site uuid "824769d3-1279-42ce-9bcb-6b813354c03c" -y
+drush cset language.entity.hu uuid "2a63e705-5e72-41e3-82b9-a828f904c077" -y
+drush cset shortcut.set.default uuid "5e7d1d6a-f20c-4daa-8524-beaf1a578270" -y
+
 
 # tulajdonos, jogosultságok beállítása
 chown -R www-data:www-data /var/www/html
 chmod -R 700 /var/www/html
 
 # egyedi blokkok helyének betöltése
-composer require 'drupal/recreate_block_content:^3.0'
+composer require 'drupal/recreate_block_content'
 drush en recreate_block_content -y
 
-# Drupal jelenlegi verziójában van egy hiba, ami miatt felül kell írni az alábbi fájl tartalmát
-# drupal-dev/config/shortcut.set.default.yml
-# https://dev.fabianmaria.local/admin/config/development/configuration/single/export
-# Gyorshivatkozás csoport, Alapértelmezés
-
 # konfiguráció importálása
-drush cim --source "/var/www/html/config"
+# drush cim --source "/var/www/html/config"
 
 # nyelvi fájlok frissítése
 drush locale:update

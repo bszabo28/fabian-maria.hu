@@ -1,20 +1,20 @@
 version: '3.9'
 
 services:
-  # frontend:
-  #   command: gulp watch
-  #   container_name: fabianmaria_frontend
-  #   networks:
-  #     - fabianmaria-network
-  #   build:
-  #     context: "./"
-  #     dockerfile: "./docker/frontend/Dockerfile"
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - "./drupal-dev/frontend:/app"
-  #     - "/app/node_modules"
-  #     - "./drupal-dev/web/themes/custom/:/app/themes/custom/"
+  frontend:
+    command: gulp watch
+    container_name: fabianmaria_frontend
+    networks:
+      - fabianmaria-network
+    build:
+      context: "./"
+      dockerfile: "./docker/frontend/Dockerfile"
+    env_file:
+      - .env
+    volumes:
+      - "./drupal-dev/frontend:/app"
+      - "/app/node_modules"
+      - "./drupal-dev/web/themes/custom/:/app/themes/custom/"
   mysql:
     container_name: fabianmaria_mysql
     networks:
